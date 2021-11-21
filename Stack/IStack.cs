@@ -1,14 +1,14 @@
 ﻿namespace MyStack
 {
 
-    public interface IStack
+    public interface IStack<T>
     {
         int Count { get; }
-        object Peek { get; }
+        T Peek { get; }
 
         bool IsFull();
         bool IsEmpty();
-        void Push(object value);
-        object Pop();
+        void Push(T value);
+        T Pop();
     }
 }

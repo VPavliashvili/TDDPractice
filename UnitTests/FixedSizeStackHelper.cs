@@ -4,30 +4,30 @@ namespace Tests;
 
 internal static class FixedSizeStackHelper
 {
-    public static IStack CreateEmptyStack()
+    public static IStack<T> CreateEmptyStack<T>()
     {
-        return new FixedSizeStack(10);
+        return new MyStack<T>(10);
     }
 
-    public static IStack CreatePopulatedStack()
+    public static IStack<object> CreatePopulatedStack()
     {
-        IStack stack = CreateEmptyStack();
+        IStack<object> stack = CreateEmptyStack<object>();
         stack.Push(1);
         stack.Push(2);
         stack.Push(3);
         return stack;
     }
 
-    public static IStack CreateFullStack()
+    public static IStack<object> CreateFullStack()
     {
-        IStack stack = new FixedSizeStack(2);
+        IStack<object> stack = new MyStack<object>(2);
         stack.Push(1);
         stack.Push(2);
         return stack;
     }
 
-    public static IStack CreateNonFullStack()
+    public static IStack<T> CreateNonFullStack<T>()
     {
-        return CreateEmptyStack();
+        return CreateEmptyStack<T>();
     }
 }

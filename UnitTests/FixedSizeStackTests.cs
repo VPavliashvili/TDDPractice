@@ -17,7 +17,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShouldDetectWhenFull()
     {
-        IStack stack = FixedSizeStackHelper.CreateFullStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateFullStack();
 
         bool isFull = stack.IsFull();
 
@@ -27,7 +27,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShouldDetectWhenNotFull()
     {
-        IStack stack = new FixedSizeStack(3);
+        IStack<object> stack = new MyStack<object>(3);
         stack.Push(1);
         stack.Push(2);
 
@@ -40,7 +40,7 @@ public class FixedSizeStackTests
     public void ShouldPushElement()
     {
         //arrange
-        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateEmptyStack<object>();
         int before = stack.Count;
         object valToPush = 10;
 
@@ -55,19 +55,19 @@ public class FixedSizeStackTests
     }
 
     [Fact]
-    public void ShouldThrowInvalidOperationExceptionWhenPushingIntoFullStack()
+    public void ShouldNotThrowInvalidOperationExceptionWhenPushingIntoFullStack()
     {
-        IStack stack = new FixedSizeStack(1);
+        IStack<object> stack = new MyStack<object>(1);
         object valToPush = 10;
         stack.Push(valToPush);
 
-        Assert.Throws<InvalidOperationException>(() => stack.Push(valToPush));
+        Assert.Null(Record.Exception(() => stack.Push(valToPush)));
     }
 
     [Fact]
     public void ShouldGetPeekElement()
     {
-        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateEmptyStack<object>();
         object valToAdd = 7;
         stack.Push(valToAdd);
 
@@ -79,7 +79,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShouldThrowInvalidOperationExceptionWhenPeekingFromEmptyStack()
     {
-        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateEmptyStack<object>();
 
         Assert.Throws<InvalidOperationException>(() => stack.Peek);
     }
@@ -87,7 +87,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShouldDetectWhenEmpty()
     {
-        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateEmptyStack<object>();
 
         bool isEmpty = stack.IsEmpty();
 
@@ -97,7 +97,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShouldDetectWhenNotEmpty()
     {
-        IStack stack = FixedSizeStackHelper.CreatePopulatedStack();
+        IStack<object> stack = FixedSizeStackHelper.CreatePopulatedStack();
         stack.Push(12);
 
         bool isEmpty = stack.IsEmpty();
@@ -108,7 +108,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShouldPopWhenNotEmpty()
     {
-        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateEmptyStack<object>();
         object valToPush = 19;
         stack.Push(valToPush);
 
@@ -121,7 +121,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShouldThrowInvalidOperationExceptionWhenPopingFromEmptyStack()
     {
-        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateEmptyStack<object>();
 
         Assert.Throws<InvalidOperationException>(() => stack.Pop());
     }
@@ -129,7 +129,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShouldRemovePoppedValueFromStack()
     {
-        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateEmptyStack<object>();
         object toPopped = 10;
         object expectedPeek = 15;
         stack.Push(expectedPeek);
@@ -145,7 +145,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShuldDecreaseCountAfterPop()
     {
-        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateEmptyStack<object>();
         object val1 = 1;
         object val2 = 1;
         object val3 = 1;
@@ -167,7 +167,7 @@ public class FixedSizeStackTests
     [Fact]
     public void ShouldRememberAllStoredElements()
     {
-        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
+        IStack<object> stack = FixedSizeStackHelper.CreateEmptyStack<object>();
         object value5 = 5;
         object value4 = 4;
         object value3 = 3;
@@ -191,6 +191,33 @@ public class FixedSizeStackTests
         Assert.Equal(value3, arr[2]);
         Assert.Equal(value2, arr[3]);
         Assert.Equal(value, arr[4]);
+    }
+
+    [Fact]
+    public void ShoulOnlyContainOneTypeOfElements()
+    {
+        IStack<int> stack = FixedSizeStackHelper.CreateEmptyStack<int>();
+        stack.Push(1);
+        stack.Push(2);
+        stack.Push(3);
+
+        for (int i = 0, len = stack.Count; i < len; i++)
+        {
+            Assert.IsType<int>(stack.Pop());
+        }
+    }
+
+    [Fact]
+    public void CanIncreaseSizeIfFull()
+    {
+        IStack<object> stack = FixedSizeStackHelper.CreateFullStack();
+
+        Assert.Null(Record.Exception(() =>
+        {
+            stack.Push(1);
+            stack.Push(2);
+        }));
+
     }
 
 }
