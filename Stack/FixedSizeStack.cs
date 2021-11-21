@@ -3,17 +3,17 @@
 namespace MyStack
 {
 
-    internal class FixedSizeStack : IStack
+    public class FixedSizeStack : IStack
     {
         public int Count => _count;
-        public object Peek => _count > 0 ? _elemens[curIndex] : throw new InvalidOperationException("Can't peek from empty stack");
+        public object Peek => !IsEmpty() ? _elemens[curIndex] : throw new InvalidOperationException("Can't peek from empty stack");
 
-        private int curIndex { get => _count > 0 ? _count - 1 : 0; }
+        private int curIndex { get => !IsEmpty() ? _count - 1 : 0; }
 
         private int _count;
         private readonly int _capacity;
 
-        private object[] _elemens;
+        private readonly object[] _elemens;
 
         public FixedSizeStack(int capacity)
         {
@@ -25,7 +25,7 @@ namespace MyStack
         {
 
             if (IsFull())
-                throw new StackOverflowException("Already reached stack capacity, can't push anymore values");
+                throw new InvalidOperationException("Already reached stack capacity, can't push anymore values");
 
             _count++;
             _elemens[curIndex] = value;
@@ -43,7 +43,7 @@ namespace MyStack
 
         public bool IsFull()
         {
-            return _count >= _capacity;
+            return _count == _capacity;
         }
 
         public bool IsEmpty()

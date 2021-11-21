@@ -11,16 +11,4 @@
         void Push(object value);
         object Pop();
     }
-
-    public interface IStackFactory
-    {
-        IStack CreateStack();
-        IStack CreateStack(int capacity);
-    }
-
-    public class StackFactory : IStackFactory
-    {
-        public IStack CreateStack() => new FixedSizeStack(byte.MaxValue);
-        public IStack CreateStack(int n) => new FixedSizeStack(n);
-    }
 }

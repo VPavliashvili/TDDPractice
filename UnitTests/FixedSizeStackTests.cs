@@ -5,21 +5,19 @@ using Xunit.Abstractions;
 
 namespace Tests;
 
-public class StackTests
+public class FixedSizeStackTests
 {
-    private readonly IStackFactory _factory;
     private readonly ITestOutputHelper _output;
 
-    public StackTests(ITestOutputHelper output)
+    public FixedSizeStackTests(ITestOutputHelper output)
     {
-        _factory = new StackFactory();
         _output = output;
     }
 
     [Fact]
-    public void ShouldDetectWhenFullWithCapacity()
+    public void ShouldDetectWhenFull()
     {
-        IStack stack = _factory.CreateFullStack();
+        IStack stack = FixedSizeStackHelper.CreateFullStack();
 
         bool isFull = stack.IsFull();
 
@@ -27,19 +25,9 @@ public class StackTests
     }
 
     [Fact]
-    public void ShouldDetectWhenNotFullWichoutCapacity()
+    public void ShouldDetectWhenNotFull()
     {
-        IStack stack = _factory.CreateStack();
-
-        bool isFull = stack.IsFull();
-
-        Assert.False(isFull);
-    }
-
-    [Fact]
-    public void ShouldDetectWhenNotFullAndHasCapacity()
-    {
-        IStack stack = _factory.CreateStack(3);
+        IStack stack = new FixedSizeStack(3);
         stack.Push(1);
         stack.Push(2);
 
@@ -52,7 +40,7 @@ public class StackTests
     public void ShouldPushElement()
     {
         //arrange
-        IStack stack = _factory.CreateStack();
+        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
         int before = stack.Count;
         object valToPush = 10;
 
@@ -67,19 +55,19 @@ public class StackTests
     }
 
     [Fact]
-    public void ShouldThrowStackOverlfowExceptionWhenPushingIntoFullStack()
+    public void ShouldThrowInvalidOperationExceptionWhenPushingIntoFullStack()
     {
-        IStack stack = _factory.CreateStack(1);
+        IStack stack = new FixedSizeStack(1);
         object valToPush = 10;
         stack.Push(valToPush);
 
-        Assert.Throws<StackOverflowException>(() => stack.Push(valToPush));
+        Assert.Throws<InvalidOperationException>(() => stack.Push(valToPush));
     }
 
     [Fact]
     public void ShouldGetPeekElement()
     {
-        IStack stack = _factory.CreateStack();
+        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
         object valToAdd = 7;
         stack.Push(valToAdd);
 
@@ -91,7 +79,7 @@ public class StackTests
     [Fact]
     public void ShouldThrowInvalidOperationExceptionWhenPeekingFromEmptyStack()
     {
-        IStack stack = _factory.CreateEmptyStack();
+        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
 
         Assert.Throws<InvalidOperationException>(() => stack.Peek);
     }
@@ -99,7 +87,7 @@ public class StackTests
     [Fact]
     public void ShouldDetectWhenEmpty()
     {
-        IStack stack = _factory.CreateEmptyStack();
+        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
 
         bool isEmpty = stack.IsEmpty();
 
@@ -109,7 +97,7 @@ public class StackTests
     [Fact]
     public void ShouldDetectWhenNotEmpty()
     {
-        IStack stack = _factory.CreatePopulatedStack();
+        IStack stack = FixedSizeStackHelper.CreatePopulatedStack();
         stack.Push(12);
 
         bool isEmpty = stack.IsEmpty();
@@ -120,7 +108,7 @@ public class StackTests
     [Fact]
     public void ShouldPopWhenNotEmpty()
     {
-        IStack stack = _factory.CreateStack();
+        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
         object valToPush = 19;
         stack.Push(valToPush);
 
@@ -133,7 +121,7 @@ public class StackTests
     [Fact]
     public void ShouldThrowInvalidOperationExceptionWhenPopingFromEmptyStack()
     {
-        IStack stack = _factory.CreateEmptyStack();
+        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
 
         Assert.Throws<InvalidOperationException>(() => stack.Pop());
     }
@@ -141,7 +129,7 @@ public class StackTests
     [Fact]
     public void ShouldRemovePoppedValueFromStack()
     {
-        IStack stack = _factory.CreateStack();
+        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
         object toPopped = 10;
         object expectedPeek = 15;
         stack.Push(expectedPeek);
@@ -157,7 +145,7 @@ public class StackTests
     [Fact]
     public void ShuldDecreaseCountAfterPop()
     {
-        IStack stack = _factory.CreateStack();
+        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
         object val1 = 1;
         object val2 = 1;
         object val3 = 1;
@@ -179,7 +167,7 @@ public class StackTests
     [Fact]
     public void ShouldRememberAllStoredElements()
     {
-        IStack stack = _factory.CreateStack();
+        IStack stack = FixedSizeStackHelper.CreateEmptyStack();
         object value5 = 5;
         object value4 = 4;
         object value3 = 3;
