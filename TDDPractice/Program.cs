@@ -1,2 +1,6 @@
 ﻿
-Console.WriteLine("Hello, World!");
+
+using Queue;
+
+MyQueue queue = new();
+queue.Enqueue();
