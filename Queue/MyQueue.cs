@@ -7,13 +7,37 @@ namespace Queue;
 public class MyQueue
 {
 
-    public bool IsEmpty => _count == 0;
+    public bool IsEmpty => Count == 0;
+    public int Count { get; private set; }
+    public object Front => GetFrontAndCheckForEmptiness();
 
-    public object Front => !IsEmpty ? 1 : throw new InvalidOperationException();
+    private readonly IDequeueStrategy _dequeueStrategy;
+    private object[] _memory;
 
-    private int _count;
+    public MyQueue()
+    {
+        _memory = new object[16];
+        _dequeueStrategy = new BasicDequeueStrategy(this);
+    }
 
-    public void IncreaseCount() => _count++;
+    public void Enqueue(object newObject)
+    {
+        _memory[Count] = newObject;
+        Count++;
+    }
 
-    public void Enqueue() => throw new NotImplementedException();
+    public object Dequeue()
+    {
+        object dequeued = GetFrontAndCheckForEmptiness();
+        Count--;
+        _memory = _dequeueStrategy.GetModifiedMemory(_memory);
+
+        return dequeued;
+    }
+
+    private object GetFrontAndCheckForEmptiness()
+    {
+        return !IsEmpty ? _memory[0] : throw new InvalidOperationException();
+    }
+
 }
