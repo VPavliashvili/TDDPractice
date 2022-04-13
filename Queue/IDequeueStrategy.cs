@@ -1,6 +1,6 @@
 ﻿namespace Queue;
 
-internal interface IDequeueStrategy
+internal interface IDequeueStrategy<T>
 {
-    object[] GetModifiedMemory(object[] memory);
+    T[] GetModifiedMemory(T[] memory);
 }

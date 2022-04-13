@@ -4,24 +4,24 @@ using System.Text;
 
 namespace Queue;
 
-public class MyQueue
+public class MyQueue<T>
 {
 
     public bool IsEmpty => Count == 0;
     public int Count { get; private set; }
-    public object Front => GetFrontAndCheckForEmptiness();
+    public T Front => GetFrontAndCheckForEmptiness();
 
-    private readonly IDequeueStrategy _dequeueStrategy;
-    private object[] _memory;
+    private readonly IDequeueStrategy<T> _dequeueStrategy;
+    private T[] _memory;
     private int _currentMaxSize = 16;
 
     public MyQueue()
     {
-        _memory = new object[_currentMaxSize];
-        _dequeueStrategy = new BasicDequeueStrategy(this);
+        _memory = new T[_currentMaxSize];
+        _dequeueStrategy = new BasicDequeueStrategy<T>(this);
     }
 
-    public void Enqueue(object newObject)
+    public void Enqueue(T newObject)
     {
         _memory[Count] = newObject;
         Count++;
@@ -39,23 +39,23 @@ public class MyQueue
 
         var temp = _memory;
 
-        _memory = new object[_currentMaxSize];
+        _memory = new T[_currentMaxSize];
         for (int i = 0, length = temp.Length; i < length; i++)
         {
             _memory[i] = temp[i];
         }
     }
 
-    public object Dequeue()
+    public T Dequeue()
     {
-        object dequeued = GetFrontAndCheckForEmptiness();
+        T dequeued = GetFrontAndCheckForEmptiness();
         Count--;
         _memory = _dequeueStrategy.GetModifiedMemory(_memory);
 
         return dequeued;
     }
 
-    private object GetFrontAndCheckForEmptiness()
+    private T GetFrontAndCheckForEmptiness()
     {
         return !IsEmpty ? _memory[0] : throw new InvalidOperationException();
     }

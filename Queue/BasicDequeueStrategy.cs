@@ -1,17 +1,17 @@
 ﻿namespace Queue;
 
-internal class BasicDequeueStrategy : IDequeueStrategy
+internal class BasicDequeueStrategy<T> : IDequeueStrategy<T>
 {
-    private readonly MyQueue _myQueue;
+    private readonly MyQueue<T> _myQueue;
 
-    public BasicDequeueStrategy(MyQueue myQueue)
+    public BasicDequeueStrategy(MyQueue<T> myQueue)
     {
         _myQueue = myQueue;
     }
 
-    public object[] GetModifiedMemory(object[] memory)
+    public T[] GetModifiedMemory(T[] memory)
     {
-        object[] temp = new object[memory.Length];
+        T[] temp = new T[memory.Length];
         for (int i = 1; i <= _myQueue.Count; i++)
         {
             temp[i - 1] = memory[i];

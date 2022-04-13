@@ -11,7 +11,7 @@ public class QueueTests
     [Fact]
     public void ShouldDetectWhenEmpty()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         bool isEmpty = myQueue.IsEmpty;
 
         Assert.True(isEmpty);
@@ -20,7 +20,7 @@ public class QueueTests
     [Fact]
     public void ShouldDetectWhenNotEmpty()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         myQueue.Enqueue(default);
         bool isEmpty = myQueue.IsEmpty;
 
@@ -30,7 +30,7 @@ public class QueueTests
     [Fact]
     public void ShouldThrowInvalidOperationExceptionWhenEmptyAndGettingFront()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         
         Assert.Throws<InvalidOperationException>(() => myQueue.Front);
     }
@@ -38,7 +38,7 @@ public class QueueTests
     [Fact]
     public void ShouldIncreaseCountAfterEnqueuing()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         int before = myQueue.Count;
         myQueue.Enqueue(default);
         int after = myQueue.Count;
@@ -50,7 +50,7 @@ public class QueueTests
     [InlineData(1)]
     public void ShouldRememberEnquedElementAsFront(object parameter)
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         myQueue.Enqueue(parameter);
 
         object front = myQueue.Front;
@@ -61,7 +61,7 @@ public class QueueTests
     [Fact]
     public void ShouldKeepUpRightFrontMemory()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         myQueue.Enqueue(1);
         myQueue.Enqueue(2);
         myQueue.Enqueue(3);
@@ -74,7 +74,7 @@ public class QueueTests
     [Fact]
     public void ShouldKeepUpRightCounting()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
 
         myQueue.Enqueue(1);
         myQueue.Enqueue(2);
@@ -88,7 +88,7 @@ public class QueueTests
     [Fact]
     public void ShouldThrowInvalidOperationExceptionWhenDequeuingEmptyQueue()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
 
         Assert.Throws<InvalidOperationException>(() => myQueue.Dequeue());
     }
@@ -96,7 +96,7 @@ public class QueueTests
     [Fact]
     public void ShouldNotThrowInvalidOperationExceptionWhenDequeuingAndNotEmpty()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         myQueue.Enqueue(default);
 
         var exception = Record.Exception(() => myQueue.Dequeue());
@@ -107,7 +107,7 @@ public class QueueTests
     [Fact]
     public void ShouldDecreaseCountAfterDequeue()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         myQueue.Enqueue(1);
         myQueue.Enqueue(2);
 
@@ -122,7 +122,7 @@ public class QueueTests
     [Fact]
     public void ShouldChangeFrontAfterDequeue()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         myQueue.Enqueue(1);
         myQueue.Enqueue(2);
         myQueue.Enqueue(3);
@@ -138,7 +138,7 @@ public class QueueTests
     [Fact]
     public void ShouldReturnFrontObjectWhenDequeueing()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         myQueue.Enqueue(1);
 
         object front = myQueue.Front;
@@ -152,7 +152,7 @@ public class QueueTests
     {
         object[] vals = { 1, "23", 'a', true };
 
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
         myQueue.Enqueue(vals[0]);
         myQueue.Enqueue(vals[1]);
         myQueue.Enqueue(vals[2]);
@@ -168,9 +168,9 @@ public class QueueTests
     [Fact]
     public void ShouldIncreaseMemoryAutomatically()
     {
-        MyQueue myQueue = new();
+        MyQueue<object> myQueue = new();
 
-        Action action = () =>
+        void action()
         {
             myQueue.Enqueue(1);
             myQueue.Enqueue(1);
@@ -189,7 +189,7 @@ public class QueueTests
             myQueue.Enqueue(1);
             myQueue.Enqueue(1);
             myQueue.Enqueue(1);
-        };
+        }
 
         var ex = Record.Exception(action);
 
