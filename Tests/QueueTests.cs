@@ -74,16 +74,15 @@ public class QueueTests
     [Fact]
     public void ShouldKeepUpRightCounting()
     {
-        object[] vals = { 1, 2, 3 };
         MyQueue myQueue = new();
-        foreach (object elem in vals)
-        {
-            myQueue.Enqueue(elem);
-        }
+
+        myQueue.Enqueue(1);
+        myQueue.Enqueue(2);
+        myQueue.Enqueue(3);
         
         int count = myQueue.Count;
 
-        Assert.Equal(vals.Length, count);
+        Assert.Equal(3, count);
     }
 
     [Fact]
@@ -154,19 +153,47 @@ public class QueueTests
         object[] vals = { 1, "23", 'a', true };
 
         MyQueue myQueue = new();
-        foreach (object val in vals)
+        myQueue.Enqueue(vals[0]);
+        myQueue.Enqueue(vals[1]);
+        myQueue.Enqueue(vals[2]);
+        myQueue.Enqueue(vals[3]);
+        
+        Assert.Equal(vals[0], myQueue.Dequeue());
+        Assert.Equal(vals[1], myQueue.Dequeue());
+        Assert.Equal(vals[2], myQueue.Dequeue());
+        Assert.Equal(vals[3], myQueue.Dequeue());
+
+    }
+
+    [Fact]
+    public void ShouldIncreaseMemoryAutomatically()
+    {
+        MyQueue myQueue = new();
+
+        Action action = () =>
         {
-            myQueue.Enqueue(val);
-        }
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+            myQueue.Enqueue(1);
+        };
 
-        for (int i = 0, len = myQueue.Count; i < len; i++)
-        {
-            object dequeued = myQueue.Dequeue();
-            object expected = vals[i];
+        var ex = Record.Exception(action);
 
-            Assert.Equal(expected, dequeued);
-        }
-
+        Assert.Null(ex);
     }
 
 }

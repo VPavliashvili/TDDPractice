@@ -13,10 +13,11 @@ public class MyQueue
 
     private readonly IDequeueStrategy _dequeueStrategy;
     private object[] _memory;
+    private int _currentMaxSize = 16;
 
     public MyQueue()
     {
-        _memory = new object[16];
+        _memory = new object[_currentMaxSize];
         _dequeueStrategy = new BasicDequeueStrategy(this);
     }
 
@@ -24,6 +25,25 @@ public class MyQueue
     {
         _memory[Count] = newObject;
         Count++;
+
+        if (Count == _currentMaxSize)
+        {
+            IncreaseFullMemory();
+        }
+
+    }
+
+    private void IncreaseFullMemory()
+    {
+        _currentMaxSize *= 2;
+
+        var temp = _memory;
+
+        _memory = new object[_currentMaxSize];
+        for (int i = 0, length = temp.Length; i < length; i++)
+        {
+            _memory[i] = temp[i];
+        }
     }
 
     public object Dequeue()
