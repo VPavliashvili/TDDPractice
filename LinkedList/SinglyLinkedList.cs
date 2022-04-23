@@ -2,6 +2,10 @@
 
 public class SinglyLinkedList
 {
+    internal Node? HeadAsNode => _head;
+    internal Node? LastAsNode => GetLastNode();
+
+    public bool IsEmpty => _head == null;
 
     private Node? _head;
 
@@ -35,7 +39,7 @@ public class SinglyLinkedList
     private Node? GetLastNode()
     {
         Node? last = _head;
-        while (last?.next != null)
+        while (last?.next is not null)
         {
             last = last.next;
         }
@@ -87,15 +91,22 @@ public class SinglyLinkedList
             throw new IndexOutOfRangeException();
         }
 
-        Node next = _head!;
+        return GetNodeAt(index)!.data;
+    }
+
+    internal Node? GetNodeAt(int index)
+    {
+        if(IsOutOfRange(index))
+            return null;
+
+        Node? next = _head;
         while (index > 0)
         {
-            next = next.next!;
+            next = next?.next;
             index--;
         }
 
-        return next.data;
-
+        return next;
     }
 
     private bool IsOutOfRange(int index)
@@ -118,6 +129,30 @@ public class SinglyLinkedList
         }
         return count;
     }
+
+    public void DeleteAt(int index)
+    {
+        if (IsOutOfRange(index))
+        {
+            throw new InvalidOperationException();
+        }
+
+        if (index == 0)
+        {
+            _head = _head!.next;
+            return;
+        }
+
+        Node nodeToDelete = GetNodeAt(index)!;
+        Node? nodeBefore = GetNodeAt(index - 1);
+        Node? nodeAfter = nodeToDelete.next;
+
+        if (nodeBefore != null)
+        {
+            nodeBefore.next = nodeAfter;
+        }
+    }
+
 
 }
 

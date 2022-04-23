@@ -297,4 +297,162 @@ public class SinglyLinkedListTests
         Assert.Equal(3, last);
     }
 
+    [Fact]
+    public void GetNodeAt_ShouldReturnNullIfIndexOutOfRange()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Push(10);
+
+        //act
+        var current = sut.GetNodeAt(index: 0);
+        var before = sut.GetNodeAt(index: -1);
+        var after = sut.GetNodeAt(index: 1);
+
+        //assert
+        Assert.Equal(10, current!.data);
+        Assert.Null(before);
+        Assert.Null(after);
+    }
+
+    [Fact]
+    public void DeleteAtFromEmptyLinkedList_ShouldThrowInvalidOperationException()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        Action action = () => sut.DeleteAt(index: 0);
+
+        //act
+        var ex = Record.Exception(action);
+
+        //assert
+        Assert.IsType<InvalidOperationException>(ex);
+    }
+
+    [Fact]
+    public void DeleteAtFromNonExistentIndex_ShouldThrowInvalidOperationException()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        Action action = () => sut.DeleteAt(index: 0);
+
+        //act
+        var ex = Record.Exception(action);
+
+        //assert
+        Assert.IsType<InvalidOperationException>(ex);
+    }
+
+    [Fact]
+    public void DeleteAtFromLastIndex_ShouldShrinkLinkedListFromRight()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(5);
+        sut.Append(10);
+
+        int indexToDelete = 2;
+        object expectedValue = 5;
+
+        //act
+        sut.DeleteAt(indexToDelete);
+        var last = sut.GetLast();
+
+        //assert
+        Assert.Equal(expectedValue, last);
+    }
+
+    [Fact]
+    public void DeleteAtFromMiddle_ShouldExcludeSpecificNodeOnThatIndex()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(5);
+        sut.Append(10);
+
+        //act
+        sut.DeleteAt(index: 1);
+        var nextOfHead = sut.HeadAsNode!.next!.data;
+
+        //assert
+        Assert.Equal(10, nextOfHead);
+    }
+
+    [Fact]
+    public void DeleteAtFromSingleSized_ShouldMakeLinkedListEmpty()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(10);
+
+        //act
+        sut.DeleteAt(0);
+
+        //assert
+        Assert.True(sut.IsEmpty);
+    }
+
+    [Fact]
+    public void DeleteAtWhenRemovingHead_ShouldShiftHeadToRight()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(10);
+        sut.Append(20);
+
+        //act
+        sut.DeleteAt(0);
+        var newHead = sut.GetHead();
+
+        //assert
+        Assert.Equal(10, newHead);
+    }
+
+    [Fact]
+    public void DeleteAtWhenRemovingLast_ShouldShiftLastToLeft()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(10);
+        sut.Append(20);
+
+        //act
+        sut.DeleteAt(2);
+        var newLast = sut.GetLast();
+
+        //assert
+        Assert.Equal(10, newLast);
+    }
+
+    [Fact]
+    public void IsEmpty_ShouldReturnTrueWhenEmpty()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+
+        //act
+        bool isEmpty = sut.IsEmpty;
+
+        //assert
+        Assert.True(isEmpty);
+    }
+    
+    [Fact]
+    public void IsEmpty_ShouldReturnFalseWhenNotEmpty()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(10);
+
+        //act
+        bool isEmpty = sut.IsEmpty;
+
+        //assert
+        Assert.False(isEmpty);
+    }
+
 }
