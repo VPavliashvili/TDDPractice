@@ -455,4 +455,136 @@ public class SinglyLinkedListTests
         Assert.False(isEmpty);
     }
 
+    [Fact]
+    public void Clear_ShouldMakeLinkedListEmpty()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(10);
+        sut.Append(20);
+        sut.Append(30);
+        sut.Append(40);
+
+        //act
+        sut.Clear();
+
+        //assert
+        Assert.True(sut.IsEmpty);
+    }
+
+    [Fact]
+    public void Reverse_ShouldSwapHeadAndLastPositions()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(10);
+        sut.Append(20);
+        sut.Append(30);
+
+        var headBefore = sut.GetHead();
+        var lastBefore = sut.GetLast();
+
+        //act
+        sut.Reverse();
+        var headAfter = sut.GetHead();
+        var lastAfter = sut.GetLast();
+
+        //assert
+        Assert.Equal(headBefore, lastAfter);
+        Assert.Equal(lastBefore, headAfter);
+    }
+
+    [Fact]
+    public void Reverse_ShouldNotThrowExceptionIfLinkedListIsEmpty()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        Action action = () => sut.Reverse();
+
+        //act
+        var ex = Record.Exception(action);
+
+        //assert
+        Assert.Null(ex);
+
+    }
+
+    [Fact]
+    public void Reverse_ElementInMiddleShouldRemainSame()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(10);
+        sut.Append(20);
+        sut.Append(30);
+        sut.Append(40);
+
+        var middleBefore = 20;
+
+        //act
+        sut.Reverse();
+        var middleAfter = sut.HeadAsNode!.next!.next!.data;
+
+        //
+        Assert.Equal(middleBefore, middleAfter);
+    }
+
+    [Fact]
+    public void Reverse_TwoMiddleElementsShouldSwapPositions()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(10);
+        sut.Append(20);
+        sut.Append(30);
+
+        var secondBefore = 10;
+        var thirdBefore = 20;
+
+        //act
+        sut.Reverse();
+        var secondAfter = sut.HeadAsNode!.next!.data;
+        var thirdAfter = sut.HeadAsNode!.next!.next!.data;
+
+        //assert
+        Assert.Equal(secondBefore, thirdAfter);
+        Assert.Equal(thirdBefore, secondAfter);
+    }
+
+    [Fact]
+    public void Reverse_EveryElementShouldChangeIndexAccordingly()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(10);
+        sut.Append(20);
+        sut.Append(30);
+        sut.Append(40);
+
+        var firstBefore = 1;
+        var secondBefore = 10;
+        var thirdBefore = 20;
+        var fourthBefore = 30;
+        var fifthBefore = 40;
+
+        //act
+        sut.Reverse();
+        var firstAfter = sut.HeadAsNode!.data;
+        var secondAfter = sut.HeadAsNode!.next!.data;
+        var thirdAfter = sut.HeadAsNode!.next!.next!.data;
+        var fourthAfter = sut.HeadAsNode!.next!.next!.next!.data;
+        var fifthAfter = sut.HeadAsNode!.next!.next!.next!.next!.data;
+
+        //assert
+        Assert.Equal(firstBefore, fifthAfter);
+        Assert.Equal(secondBefore, fourthAfter);
+        Assert.Equal(thirdBefore, thirdAfter);
+        Assert.Equal(fourthBefore, secondAfter);
+        Assert.Equal(fifthBefore, firstAfter);
+    }
+
 }

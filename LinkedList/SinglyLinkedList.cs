@@ -153,6 +153,25 @@ public class SinglyLinkedList
         }
     }
 
+    public void Clear()
+    {
+        _head = null;
+    }
+
+    public void Reverse()
+    {
+        Node? prev = null;
+        Node? current = _head;
+
+        while (current is not null)
+        {
+            Node? next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        _head = prev;
+    }
 
 }
 
