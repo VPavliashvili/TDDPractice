@@ -1,6 +1,8 @@
-﻿namespace LinkedList;
+﻿using System.Collections;
 
-public class SinglyLinkedList
+namespace LinkedList;
+
+public class SinglyLinkedList : IEnumerable
 {
     internal Node? HeadAsNode => _head;
     internal Node? LastAsNode => GetLastNode();
@@ -8,7 +10,7 @@ public class SinglyLinkedList
     public bool IsEmpty => _head == null;
 
     private Node? _head;
-
+    
     public SinglyLinkedList()
     {
         _head = default;
@@ -117,7 +119,7 @@ public class SinglyLinkedList
         return index < 0 || isEmpty || indexOfLast < index;
     }
 
-    private int GetSize()
+    public int GetSize()
     {
         int count = 0;
         Node? next = _head;
@@ -173,6 +175,18 @@ public class SinglyLinkedList
         _head = prev;
     }
 
+    public IEnumerator GetEnumerator()
+    {
+        if (_head is null)
+            yield break;
+
+        Node? next = _head;
+        while (next is not null)
+        {
+            yield return next.data;
+            next = next.next;
+        }
+    }
 }
 
 internal class Node

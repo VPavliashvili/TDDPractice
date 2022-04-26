@@ -1,5 +1,6 @@
 ﻿using LinkedList;
 using System;
+using System.Collections;
 using Xunit;
 
 namespace Tests;
@@ -585,6 +586,84 @@ public class SinglyLinkedListTests
         Assert.Equal(thirdBefore, thirdAfter);
         Assert.Equal(fourthBefore, secondAfter);
         Assert.Equal(fifthBefore, firstAfter);
+    }
+
+    [Fact]
+    public void GetSize_ShouldReturnValidAmountOfElementsInsideLinkedList()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(1);
+        sut.Append(1);
+        sut.Append(1);
+
+        //act
+        int size = sut.GetSize();
+
+        //assert
+        Assert.Equal(4, size);
+
+    }
+
+    [Fact]
+    public void ShouldBeIterableCollection()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+
+        //act
+        bool isEnumerable = sut is IEnumerable;
+
+        //assert
+        Assert.True(isEnumerable);
+    }
+
+    [Fact]
+    public void ShouldDoAsMuchStepsAsLinkedListSize()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(2);
+        sut.Append(3);
+
+        int counter = default;
+        int expected = sut.GetSize();
+
+        //act
+        foreach (var item in sut)
+        {
+            counter++;
+        }
+
+        //assert
+        Assert.Equal(expected, counter);
+    }
+
+    [Fact]
+    public void ShouldIterateOnRightElements()
+    {
+        //arrange
+        SinglyLinkedList sut = new();
+        sut.Append(1);
+        sut.Append(2);
+        sut.Append(3);
+
+        int counter = default;
+
+        //act && assert
+        foreach (var item in sut)
+        {
+            if (counter == 0)
+                Assert.Equal(1, item);
+            else if (counter == 1)
+                Assert.Equal(2, item);
+            else if (counter == 2)
+                Assert.Equal(3, item);
+
+            counter++;
+        }
     }
 
 }
